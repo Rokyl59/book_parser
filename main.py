@@ -1,4 +1,5 @@
 import requests
+import argparse
 from requests.exceptions import HTTPError
 from functions_parser import download_txt, get_book_page, get_title_author, \
     get_image_url, download_image, get_comments, get_book_genre
@@ -22,8 +23,8 @@ def parse_book_page(page_soup, book_id):
         return None
 
 
-def main(amount):
-    for book_id in range(1, amount + 1):
+def main(start_id, end_id):
+    for book_id in range(start_id, end_id + 1):
         try:
             url = f'https://tululu.org/b{book_id}/'
             page_soup = get_book_page(url)
@@ -51,4 +52,14 @@ def main(amount):
 
 
 if __name__ == '__main__':
-    main(10)
+    parser = argparse.ArgumentParser(
+        description='Download books from tululu.org'
+    )
+    parser.add_argument(
+        '--start_id', type=int, help='Start book id', default=1
+    )
+    parser.add_argument(
+        '--end_id', type=int, help='End book id', default=10
+        )
+    args = parser.parse_args()
+    main(args.start_id, args.end_id)
