@@ -35,6 +35,18 @@ def get_image_url(soup, base_url):
     return urljoin(base_url, image_src)
 
 
+def get_comments(soup):
+    comments_divs = soup.find_all('div', class_='texts')
+    comments_list = []
+    for div in comments_divs:
+        comment_tag = div.find('span', class_='black')
+        comment_text = comment_tag.get_text(strip=True)
+
+        comments_list.append(comment_text.strip())
+
+    return comments_list
+
+
 def download_txt(url, filename, folder='books/'):
     """Функция для скачивания текстовых файлов.
     Args:

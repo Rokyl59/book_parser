@@ -1,7 +1,7 @@
 import requests
 from requests.exceptions import HTTPError
 from functions_parser import download_txt, get_book_page, get_title_author, \
-    get_image_url, download_image
+    get_image_url, download_image, get_comments
 
 
 def main(amount):
@@ -18,6 +18,10 @@ def main(amount):
                 download_image(image_url, f'{book_id}')
                 print(f'Book {book_id} downloaded successfully: {filepath}')
                 print(f'Cover URL: {image_url}')
+                comments = get_comments(page_soup)
+                print("Comments:")
+                for comment in comments:
+                    print(comment)
             else:
                 print(f'Book {book_id} not found on the site.')
         except HTTPError as e:
