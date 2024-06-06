@@ -1,7 +1,7 @@
 import requests
 from requests.exceptions import HTTPError
 from functions_parser import download_txt, get_book_page, get_title_author, \
-    get_image_url, download_image, get_comments
+    get_image_url, download_image, get_comments, get_book_genre
 
 
 def main(amount):
@@ -22,6 +22,8 @@ def main(amount):
                 print("Comments:")
                 for comment in comments:
                     print(comment)
+                genre = get_book_genre(page_soup)
+                print(f'Genre: {genre}')
             else:
                 print(f'Book {book_id} not found on the site.')
         except HTTPError as e:

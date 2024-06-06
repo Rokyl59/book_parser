@@ -47,6 +47,12 @@ def get_comments(soup):
     return comments_list
 
 
+def get_book_genre(soup):
+    genre_tags = soup.find('span', class_='d_book').find_all('a')
+    genres = [tag.text.strip() for tag in genre_tags]
+    return genres if genres else None
+
+
 def download_txt(url, filename, folder='books/'):
     """Функция для скачивания текстовых файлов.
     Args:
