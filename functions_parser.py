@@ -12,13 +12,10 @@ def check_for_redirect(response):
 
 
 def get_book_page(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        check_for_redirect(response)
-        return BeautifulSoup(response.text, 'html.parser')
-    except (HTTPError, requests.RequestException):
-        return None
+    response = requests.get(url)
+    response.raise_for_status()
+    check_for_redirect(response)
+    return BeautifulSoup(response.text, 'html.parser')
 
 
 def get_title_author(soup):
@@ -37,17 +34,15 @@ def get_image_url(soup, base_url):
 
 def get_comments(soup):
     comments_divs = soup.find_all('div', class_='texts')
-    comments_list = []
+    comments = []
     for div in comments_divs:
         comment_tag = div.find('span', class_='black')
         comment_text = comment_tag.get_text(strip=True)
-
-        comments_list.append(comment_text.strip())
-
-    return comments_list
+        comments.append(comment_text.strip())
+    return comments
 
 
-def get_book_genre(soup):
+def get_book_genres(soup):
     genre_tags = soup.find('span', class_='d_book').find_all('a')
     genres = [tag.text.strip() for tag in genre_tags]
     return genres if genres else None
@@ -62,9 +57,8 @@ def download_txt(url, filename, folder='books/'):
     Returns:
         str: Путь до файла, куда сохранён текст.
     """
-    safe_filename = sanitize_filename(filename) + '.txt'
+    safe_filename = f"{sanitize_filename(filename)}.txt"
     filepath = os.path.join(folder, safe_filename)
-
     os.makedirs(folder, exist_ok=True)
 
     response = requests.get(url)
@@ -90,9 +84,8 @@ def download_image(url, filename, folder='images/'):
     filename, file_extension = os.path.splitext(parsed_url.path)
     decoded_filename = unquote(os.path.basename(filename))
     safe_filename = sanitize_filename(decoded_filename)
-    filename_with_extension = safe_filename + file_extension
+    filename_with_extension = f"{safe_filename}{file_extension}"
     filepath = os.path.join(folder, filename_with_extension)
-
     os.makedirs(folder, exist_ok=True)
 
     response = requests.get(url)
