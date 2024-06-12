@@ -1,5 +1,6 @@
 import time
 import argparse
+import requests
 from requests.exceptions import HTTPError, RequestException
 from functions_parser import download_txt, get_book_page, get_title_author, \
     get_image_url, download_image, get_comments, get_book_genres
@@ -37,18 +38,19 @@ def main():
             try:
                 book_url = f'https://tululu.org/b{book_id}/'
                 book_page_soup = get_book_page(book_url)
-                book_info = parse_book_page(book_page_soup, book_id)
-
+                book_page = parse_book_page(book_page_soup, book_id)
+                
+                base_url = 'https://tululu.org/txt.php'
                 params = {'id': book_id}
-                txt_url = f'https://tululu.org/txt.php?{urlencode(params)}'
-                txt_filename = f"{book_id}. {book_info['title']}"
+                txt_url = requests.get(base_url, params=urlencode(params)).url
+                txt_filename = f"{book_id}. {book_page['title']}"
                 txt_filepath = download_txt(txt_url, txt_filename)
-                download_image(book_info['image_url'], f'{book_id}')
+                download_image(book_page['image_url'], f'{book_id}')
                 print(f'\nBook {book_id} downloaded: {txt_filepath}')
-                print(f'Cover URL: {book_info["image_url"]}')
-                print(f'Genres: {book_info["genres"]}')
+                print(f'Cover URL: {book_page["image_url"]}')
+                print(f'Genres: {book_page["genres"]}')
                 print("Comments:")
-                for comment in book_info["comments"]:
+                for comment in book_page["comments"]:
                     print(comment)
 
                 break
@@ -61,10 +63,6 @@ def main():
                 print(f'Connection error occurred while downloading book {book_id}: {error}')
                 print('Retrying in 5 seconds...')
                 time.sleep(5)
-
-            except Exception as error:
-                print(f"Error parsing book {book_id}: {error}")
-                break
 
 
 if __name__ == '__main__':
