@@ -48,7 +48,7 @@ def get_book_genres(soup):
     return genres if genres else None
 
 
-def download_txt(url, filename, folder='books/'):
+def download_txt(url, params, filename, folder='books/'):
     """Функция для скачивания текстовых файлов.
     Args:
         url (str): Ссылка на текст, который хочется скачать.
@@ -61,7 +61,7 @@ def download_txt(url, filename, folder='books/'):
     filepath = os.path.join(folder, safe_filename)
     os.makedirs(folder, exist_ok=True)
 
-    response = requests.get(url)
+    response = requests.get(url, params=params)
     response.raise_for_status()
     check_for_redirect(response)
 
