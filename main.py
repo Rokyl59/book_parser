@@ -4,12 +4,11 @@ import requests
 from requests.exceptions import HTTPError, RequestException
 from functions_parser import download_txt, get_book_page, get_title_author, \
     get_image_url, download_image, get_comments, get_book_genres
-from urllib.parse import urlencode
 
 
-def parse_book_page(page_soup, book_id):
+def parse_book_page(page_soup, book_id, book_url):
     title, author = get_title_author(page_soup)
-    image_url = get_image_url(page_soup, f'https://tululu.org/b{book_id}/')
+    image_url = get_image_url(page_soup, book_url)
     comments = get_comments(page_soup)
     genres = get_book_genres(page_soup)
     return {
@@ -38,11 +37,11 @@ def main():
             try:
                 book_url = f'https://tululu.org/b{book_id}/'
                 book_page_soup = get_book_page(book_url)
-                book_page = parse_book_page(book_page_soup, book_id)
-                
+                book_page = parse_book_page(book_page_soup, book_id, book_url)
+
                 base_url = 'https://tululu.org/txt.php'
                 params = {'id': book_id}
-                txt_url = requests.get(base_url, params=urlencode(params)).url
+                txt_url = requests.get(base_url, params=params).url
                 txt_filename = f"{book_id}. {book_page['title']}"
                 txt_filepath = download_txt(txt_url, txt_filename)
                 download_image(book_page['image_url'], f'{book_id}')
