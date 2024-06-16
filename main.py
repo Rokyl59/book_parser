@@ -25,7 +25,7 @@ def parse_book_page(page_soup, book_url):
 def main():
     parser = argparse.ArgumentParser(description='Download books from tululu.org')
     parser.add_argument('--start_page', type=int, help='Start page number', default=1)
-    parser.add_argument('--end_page', type=int, help='End page number', default=1)
+    parser.add_argument('--end_page', type=int, help='End page number', default=5)
     parser.add_argument('--dest_folder', type=str, help='Destination folder path', default='')
     parser.add_argument('--skip_imgs', action='store_true', help='Skip downloading images')
     parser.add_argument('--skip_txt', action='store_true', help='Skip downloading text files')
