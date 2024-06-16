@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import argparse
 
 
 base_url = 'http://tululu.org/l55/'
@@ -22,8 +23,16 @@ def get_all_books_ids(url):
 
 
 def main():
+    parser = argparse.ArgumentParser(description='Download books from tululu.org')
+    parser.add_argument('--start_page', type=int, help='Start page number', default=1)
+    parser.add_argument('--end_page', type=int, help='End page number', default=1)
+    args = parser.parse_args()
+
+    start_page = args.start_page
+    end_page = args.end_page
+
     all_book_ids = []
-    for page in range(1, 5):
+    for page in range(start_page, end_page + 1):
         url = f'{base_url}{page}/'
         book_ids = get_all_books_ids(url)
         all_book_ids.extend(book_ids)
