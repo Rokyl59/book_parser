@@ -1,8 +1,9 @@
 import time
-import argparse
+import json
 from requests.exceptions import HTTPError, RequestException
 from functions_parser import download_txt, get_book_page, get_title_author, \
     get_image_url, download_image, get_comments, get_book_genres
+from parse_tululu_category import main as get_book_ids
 
 
 def parse_book_page(page_soup, book_url):
@@ -20,18 +21,10 @@ def parse_book_page(page_soup, book_url):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Download books from tululu.org'
-    )
-    parser.add_argument(
-        '--start_id', type=int, help='Start book id', default=1
-    )
-    parser.add_argument(
-        '--end_id', type=int, help='End book id', default=10
-    )
-    args = parser.parse_args()
+    book_ids = get_book_ids()
 
-    for book_id in range(args.start_id, args.end_id + 1):
+    books_pages = []
+    for book_id in book_ids:
         while True:
             try:
                 book_url = f'https://tululu.org/b{book_id}/'
@@ -43,6 +36,10 @@ def main():
                 txt_filename = f"{book_id}. {book_page['title']}"
                 txt_filepath = download_txt(base_url, params, txt_filename)
                 download_image(book_page['image_url'], f'{book_id}')
+
+                book_page['txt_filepath'] = txt_filepath
+                books_pages.append(book_page)
+
                 print(f'\nBook {book_id} downloaded: {txt_filepath}')
                 print(f'Cover URL: {book_page["image_url"]}')
                 print(f'Genres: {book_page["genres"]}')
@@ -60,6 +57,9 @@ def main():
                 print(f'Connection error occurred while downloading book {book_id}: {error}')
                 print('Retrying in 5 seconds...')
                 time.sleep(5)
+
+    with open('books_data.json', 'w', encoding='utf-8') as json_file:
+        json.dump(books_pages, json_file, ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':
