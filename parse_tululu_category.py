@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import argparse
+import os
 
 
 base_url = 'http://tululu.org/l55/'
@@ -26,10 +27,19 @@ def main():
     parser = argparse.ArgumentParser(description='Download books from tululu.org')
     parser.add_argument('--start_page', type=int, help='Start page number', default=1)
     parser.add_argument('--end_page', type=int, help='End page number', default=1)
+    parser.add_argument('--dest_folder', type=str, help='Destination folder path', default='')
+    parser.add_argument('--skip_imgs', action='store_true', help='Skip downloading images')
+    parser.add_argument('--skip_txt', action='store_true', help='Skip downloading text files')
     args = parser.parse_args()
 
     start_page = args.start_page
     end_page = args.end_page
+    dest_folder = args.dest_folder
+    skip_imgs = args.skip_imgs
+    skip_txt = args.skip_txt
+
+    if dest_folder:
+        os.makedirs(dest_folder, exist_ok=True)
 
     all_book_ids = []
     for page in range(start_page, end_page + 1):
@@ -37,9 +47,9 @@ def main():
         book_ids = get_all_books_ids(url)
         all_book_ids.extend(book_ids)
 
-    return all_book_ids
+    return all_book_ids, dest_folder, skip_imgs, skip_txt
 
 
 if __name__ == '__main__':
-    book_ids = main()
+    book_ids, dest_folder, skip_imgs, skip_txt = main()
     print(f'IDs книг: {book_ids}')
