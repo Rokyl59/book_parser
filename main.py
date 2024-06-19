@@ -3,7 +3,7 @@ import json
 from requests.exceptions import HTTPError, RequestException
 from functions_parser import download_txt, get_book_page, get_title_author, \
     get_image_url, download_image, get_comments, get_book_genres
-from parse_tululu_category import main as get_book_ids
+from parse_tululu_category import get_book_ids
 import argparse
 import os
 
@@ -31,9 +31,15 @@ def main():
     parser.add_argument('--skip_txt', action='store_true', help='Skip downloading text files')
     args = parser.parse_args()
 
-    book_ids, dest_folder, skip_imgs, skip_txt = get_book_ids()
+    start_page = args.start_page
+    end_page = args.end_page
+    dest_folder = args.dest_folder
+    skip_imgs = args.skip_imgs
+    skip_txt = args.skip_txt
 
-    books_data = []
+    book_ids, dest_folder = get_book_ids(start_page, end_page, dest_folder)
+
+    books_page = []
     for book_id in book_ids:
         while True:
             try:
@@ -52,12 +58,12 @@ def main():
                     image_folder = os.path.join(dest_folder, 'images')
                     download_image(book_page['image_url'], f'{book_id}', folder=image_folder)
 
-                books_data.append(book_page)
+                books_page.append(book_page)
 
                 print(f'\nBook {book_id} downloaded:')
-                if not skip_txt:
-                    print(f'Text saved: {txt_filepath}')
-                if not skip_imgs:
+                if 'txt_filepath' in book_page:
+                    print(f'Text saved: {book_page["txt_filepath"]}')
+                if 'image_url' in book_page:
                     print(f'Cover URL: {book_page["image_url"]}')
                 print(f'Genres: {book_page["genres"]}')
                 print("Comments:")
@@ -80,8 +86,8 @@ def main():
     if dest_folder:
         json_filepath = os.path.join(dest_folder, 'books_data.json')
         with open(json_filepath, 'w', encoding='utf-8') as json_file:
-            json.dump(books_data, json_file, ensure_ascii=False, indent=4)
-            print(f'JSON file saved: {json_filepath}')
+            json.dump(books_page, json_file, ensure_ascii=False, indent=4)
+        print(f'JSON file saved: {json_filepath}')
 
 
 if __name__ == '__main__':

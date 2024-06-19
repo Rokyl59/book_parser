@@ -19,32 +19,23 @@ def get_book_page(url):
 
 
 def get_title_author(soup):
-    title_tag = soup.find('h1')
-    title_text = title_tag.text.strip()
-    title_author = title_text.split('::')
-    title, author = title_author
-    return title.strip(), author.strip()
+    title_text = soup.select_one('h1').get_text(strip=True)
+    title, author = map(str.strip, title_text.split('::'))
+    return title, author
 
 
 def get_image_url(soup, base_url):
-    image_tag = soup.find('div', class_='bookimage').find('img')
-    image_src = image_tag['src']
+    image_src = soup.select_one('div.bookimage img')['src']
     return urljoin(base_url, image_src)
 
 
 def get_comments(soup):
-    comments_divs = soup.find_all('div', class_='texts')
-    comments = []
-    for div in comments_divs:
-        comment_tag = div.find('span', class_='black')
-        comment_text = comment_tag.get_text(strip=True)
-        comments.append(comment_text.strip())
+    comments = [tag.get_text(strip=True) for tag in soup.select('div.texts span.black')]
     return comments
 
 
 def get_book_genres(soup):
-    genre_tags = soup.find('span', class_='d_book').find_all('a')
-    genres = [tag.text.strip() for tag in genre_tags]
+    genres = [tag.get_text(strip=True) for tag in soup.select('span.d_book a')]
     return genres if genres else None
 
 
