@@ -15,7 +15,7 @@ def check_for_redirect(response):
         raise TululuRedirectError(f"Redirected to main page: {response.url}")
 
 
-def get_book_id(url):
+def get_book_ids_from_page(url):
     response = requests.get(url)
     response.raise_for_status()
     check_for_redirect(response)
@@ -45,7 +45,7 @@ def get_book_ids(start_page, end_page, dest_folder):
     for page in range(start_page, end_page + 1):
         url = f'{base_url}{page}/'
         try:
-            book_ids = get_book_id(url)
+            book_ids = get_book_ids_from_page(url)
             all_book_ids.extend(book_ids)
         except TululuRedirectError as e:
             print(f"Error: {e}")
