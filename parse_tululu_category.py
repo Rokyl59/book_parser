@@ -1,7 +1,6 @@
+import os
 import requests
 from bs4 import BeautifulSoup
-import argparse
-import os
 
 
 base_url = 'http://tululu.org/l55/'

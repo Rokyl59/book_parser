@@ -1,8 +1,8 @@
 import os
 import requests
+from bs4 import BeautifulSoup
 from requests.exceptions import HTTPError
 from pathvalidate import sanitize_filename
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse, unquote
 
 

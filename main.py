@@ -1,11 +1,20 @@
-import time
-import json
-from requests.exceptions import HTTPError, RequestException
-from functions_parser import download_txt, get_book_page, get_title_author, \
-    get_image_url, download_image, get_comments, get_book_genres
-from parse_tululu_category import get_book_ids
 import argparse
+import json
 import os
+import time
+
+from requests.exceptions import HTTPError, RequestException
+
+from functions_parser import (
+    download_image,
+    download_txt,
+    get_book_genres,
+    get_book_page,
+    get_comments,
+    get_image_url,
+    get_title_author,
+)
+from parse_tululu_category import get_book_ids
 
 
 def parse_book_page(page_soup, book_url):
