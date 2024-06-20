@@ -64,18 +64,16 @@ def main():
                     txt_filename = f"{book_id}. {book_page['title']}"
                     txt_filepath = download_txt(base_url, params, txt_filename, folder=os.path.join(dest_folder, 'books'))
                     book_page['txt_filepath'] = txt_filepath
+                    print(f'Text saved: {book_page["txt_filepath"]}')
 
                 if not skip_imgs:
                     image_folder = os.path.join(dest_folder, 'images')
                     download_image(book_page['image_url'], f'{book_id}', folder=image_folder)
+                    print(f'Cover URL: {book_page["image_url"]}')
 
                 books.append(book_page)
 
                 print(f'\nBook {book_id} downloaded:')
-                if 'txt_filepath' in book_page:
-                    print(f'Text saved: {book_page["txt_filepath"]}')
-                if 'image_url' in book_page:
-                    print(f'Cover URL: {book_page["image_url"]}')
                 print(f'Genres: {book_page["genres"]}')
                 print("Comments:")
                 for comment in book_page["comments"]:
