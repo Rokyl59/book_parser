@@ -1,4 +1,3 @@
-import os
 import requests
 from bs4 import BeautifulSoup
 
@@ -32,15 +31,7 @@ def get_book_ids_from_page(url):
     return book_ids
 
 
-def create_folder(dest_folder):
-    if dest_folder:
-        os.makedirs(dest_folder, exist_ok=True)
-
-
-def get_book_ids(start_page, end_page, dest_folder):
-    if dest_folder:
-        os.makedirs(dest_folder, exist_ok=True)
-
+def get_book_ids(start_page, end_page):
     all_book_ids = []
     for page in range(start_page, end_page + 1):
         url = f'{base_url}{page}/'
@@ -51,4 +42,4 @@ def get_book_ids(start_page, end_page, dest_folder):
             print(f"Error: {e}")
             continue
 
-    return all_book_ids, dest_folder
+    return all_book_ids

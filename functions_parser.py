@@ -1,14 +1,9 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-from requests.exceptions import HTTPError
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, urlparse, unquote
-
-
-def check_for_redirect(response):
-    if response.history:
-        raise HTTPError(f"Redirected to {response.url}")
+from parse_tululu_category import check_for_redirect
 
 
 def get_book_page(url):
