@@ -50,7 +50,7 @@ def main():
         os.makedirs(dest_folder, exist_ok=True)
 
     book_ids = get_book_ids(start_page, end_page)
-    books_page = []
+    books = []
     for book_id in book_ids:
         while True:
             try:
@@ -69,7 +69,7 @@ def main():
                     image_folder = os.path.join(dest_folder, 'images')
                     download_image(book_page['image_url'], f'{book_id}', folder=image_folder)
 
-                books_page.append(book_page)
+                books.append(book_page)
 
                 print(f'\nBook {book_id} downloaded:')
                 if 'txt_filepath' in book_page:
@@ -97,7 +97,7 @@ def main():
     if dest_folder:
         json_filepath = os.path.join(dest_folder, 'books_data.json')
         with open(json_filepath, 'w', encoding='utf-8') as json_file:
-            json.dump(books_page, json_file, ensure_ascii=False, indent=4)
+            json.dump(books, json_file, ensure_ascii=False, indent=4)
         print(f'JSON file saved: {json_filepath}')
 
 
