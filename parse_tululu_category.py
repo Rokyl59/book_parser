@@ -32,6 +32,11 @@ def get_book_id(url):
     return book_ids
 
 
+def create_folder(dest_folder):
+    if dest_folder:
+        os.makedirs(dest_folder, exist_ok=True)
+
+
 def get_book_ids(start_page, end_page, dest_folder):
     if dest_folder:
         os.makedirs(dest_folder, exist_ok=True)

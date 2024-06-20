@@ -14,7 +14,7 @@ from functions_parser import (
     get_image_url,
     get_title_author,
 )
-from parse_tululu_category import get_book_ids
+from parse_tululu_category import get_book_ids, create_folder
 
 
 def parse_book_page(page_soup, book_url):
@@ -47,7 +47,7 @@ def main():
     skip_txt = args.skip_txt
 
     book_ids, dest_folder = get_book_ids(start_page, end_page, dest_folder)
-
+    dest_folder = create_folder(dest_folder)
     books_page = []
     for book_id in book_ids:
         while True:
