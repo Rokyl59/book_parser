@@ -2,18 +2,10 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from requests.exceptions import HTTPError, RequestException
+from functions_parser import check_for_redirect, TululuRedirectError
 
 
 base_url = 'http://tululu.org/l55/'
-
-
-class TululuRedirectError(requests.HTTPError):
-    pass
-
-
-def check_for_redirect(response):
-    if response.history:
-        raise TululuRedirectError(f"Redirected to main page: {response.url}")
 
 
 def get_book_ids_from_page(url):

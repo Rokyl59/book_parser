@@ -3,7 +3,15 @@ import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, urlparse, unquote
-from parse_tululu_category import check_for_redirect
+
+
+class TululuRedirectError(requests.HTTPError):
+    pass
+
+
+def check_for_redirect(response):
+    if response.history:
+        raise TululuRedirectError(f"Redirected to main page: {response.url}")
 
 
 def get_book_page(url):
