@@ -12,7 +12,7 @@ class TululuRedirectError(requests.HTTPError):
 
 
 def check_for_redirect(response):
-    if response.history and response.url == 'http://tululu.org/':
+    if response.history:
         raise TululuRedirectError(f"Redirected to main page: {response.url}")
 
 
