@@ -92,11 +92,11 @@ def main():
                 print('Retrying in 5 seconds...')
                 time.sleep(5)
 
-    if dest_folder:
-        json_filepath = os.path.join(dest_folder, 'books_data.json')
-        with open(json_filepath, 'w', encoding='utf-8') as json_file:
-            json.dump(books, json_file, ensure_ascii=False, indent=4)
-        print(f'JSON file saved: {json_filepath}')
+    json_filepath = os.path.join(
+        dest_folder if dest_folder else os.getcwd(), 'books_data.json')
+    with open(json_filepath, 'w', encoding='utf-8') as json_file:
+        json.dump(books, json_file, ensure_ascii=False, indent=4)
+    print(f'JSON file saved: {json_filepath}')
 
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ def on_reload():
     )
 
     template = env.get_template('template.html')
-    path = Path.cwd().joinpath('results/books_data.json')
+    path = Path.cwd().joinpath('books_data.json')
     Path('pages').mkdir(parents=True, exist_ok=True)
 
     with open(path, 'r', encoding='utf8') as json_file:

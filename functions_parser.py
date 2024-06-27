@@ -53,6 +53,7 @@ def download_txt(url, params, filename, folder='books/'):
     """
     safe_filename = f"{sanitize_filename(filename)}.txt"
     filepath = os.path.join(folder, safe_filename)
+    filepath = filepath.replace('\\', '/')
     os.makedirs(folder, exist_ok=True)
 
     response = requests.get(url, params=params)
