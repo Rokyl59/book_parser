@@ -69,5 +69,6 @@ python render_website.py
 
 ## Вывод сайта
 
+![image](https://github.com/Rokyl59/book_parser/assets/133006108/17cabd15-3066-4a88-9e14-8d9ee2f8689d)
 
 
